@@ -1,13 +1,10 @@
+import System.Environment
+import Data.Char (digitToInt)
+
 type Expression = [Term]
 type Term = [Factor] 
 type Factor = [Digit] 
 type Digit = Int
-
-digits :: Factor
-digits = [1 .. 9]
-
-pi_digits :: Factor
-pi_digits = [3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5, 8, 9, 7]
 
 valExpr :: Expression -> Int 
 valExpr = sum . map valTerm
@@ -25,10 +22,15 @@ partitions [] = [[]]
 partitions (x:xs) = [[x]:p | p <- partitions xs]
                  ++ [(x:ys):yss | (ys:yss) <- partitions xs]
 
-good :: Int -> Bool
-good v = v == 1000
+good :: Int -> Int -> Bool
+good c v = c == v
 
-goodOnes :: [Digit] -> [Expression]
-goodOnes = filter (good . valExpr) . expressions
+goodOnes :: Digit -> [Digit] -> [Expression]
+goodOnes c = filter (good c . valExpr) . expressions
 
-main = putStrLn $ "Number of solutions found: " ++ (show $ length $ goodOnes pi_digits)
+main = do
+    (sumStr:digitsStr:_) <- getArgs
+    let digits = map digitToInt digitsStr
+    let sum = read sumStr :: Int
+    putStrLn $ "Number of solutions found: " ++ (show $ length $ goodOnes sum digits)
+

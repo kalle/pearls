@@ -1,13 +1,10 @@
+import System.Environment
+import Data.Char (digitToInt)
+
 type Expression = [Term]
 type Term = [Factor] 
 type Factor = [Digit] 
 type Digit = Int
-
-digits :: Factor
-digits = [1 .. 9]
-
-pi_digits :: Factor
-pi_digits = [3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5, 8, 9, 7]
 
 good c (_, f, t, e)  = (f * t + e ==c)
 ok c (_, f, t, e)    = (f * t + e <= c)
@@ -25,4 +22,9 @@ glue x ((xs : xss) : xsss, (k, f, t, e)) =
     (([x] : xs : xss) : xsss, (10, x, f * t, e)),
     ([[x]] : (xs : xss) : xsss, (10, x, 1, f * t + e))]
 
-main = putStrLn $ "Number of solutions found: " ++ (show $ length $ solutions 1000 pi_digits)
+main = do
+    (sumStr:digitsStr:_) <- getArgs
+    let digits = map digitToInt digitsStr
+    let sum = read sumStr :: Int
+    putStrLn $ "Number of solutions found: " ++ (show $ length $ solutions sum digits)
+
