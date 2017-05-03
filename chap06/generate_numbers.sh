@@ -11,8 +11,10 @@ time_run() {
     wanted_sum=$2
     digits=$3
     num_digits=$4
-    t=`(time ./$cmd $wanted_sum $digits) 2>&1 | grep real | cut -f 2 | tr m ' ' | tr -d s`
-    echo "$wanted_sum $num_digits $t"
+    echo "$wanted_sum $num_digits"
+    /usr/bin/time -p ./$cmd $wanted_sum $digits 2>&1
+#    t=`(/usr/bin/time -ph ./$cmd $wanted_sum $digits) 2>&1 | grep real | cut -f 2 | tr m ' ' | tr -d s`
+#    echo "$wanted_sum $num_digits $t"
 }
 
 rm -rf $OUTDIR
@@ -30,7 +32,7 @@ for s in $SUMS; do
     done
 done
 
-cat `find $OUTDIR -type f | sort -n` > $OUTFILE
-rm -rf $OUTDIR
+#cat `find $OUTDIR -type f | sort -n` > $OUTFILE
+#rm -rf $OUTDIR
 
 
