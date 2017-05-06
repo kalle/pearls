@@ -4,3 +4,4 @@
 *.o
 chap06/chap06a-1
 chap06/chap06c
+chap06/.env
