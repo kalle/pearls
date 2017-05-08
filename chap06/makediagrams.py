@@ -1,6 +1,5 @@
 #!/usr/bin/env python3.5
 
-import numpy as np
 import matplotlib.pyplot as plt
 import os
 
@@ -47,13 +46,16 @@ def plot_sum_vs_time(input_dir, output_file, title):
                 y.append(sum(datumlist) / len(datumlist))
                 minerr.append(min(datumlist))
                 maxerr.append(max(datumlist))
-        ax.errorbar(all_sums, y, yerr=[minerr, maxerr])
+        ax.errorbar(all_sums, y, linestyle='None', marker='_',
+                    yerr=[minerr, maxerr])
         ax.set_ylabel('time (s)')
+        ax.grid(True)
 
     plt.xticks(all_sums)
     fig.autofmt_xdate()
     ax.set_xlabel('data size')
     plt.savefig(output_file)
+
 
 def plot_datalen_vs_time(expected_sum, input_dir, output_file, title):
     raw_data, all_sums, all_lens = read_data_from(input_dir)
@@ -69,10 +71,12 @@ def plot_datalen_vs_time(expected_sum, input_dir, output_file, title):
             y.append(sum(datumlist) / len(datumlist))
             minerr.append(min(datumlist))
             maxerr.append(max(datumlist))
-    ax.errorbar(all_lens, y, yerr=[minerr, maxerr])
+    ax.errorbar(all_lens, y, linestyle='None', marker='_',
+                yerr=[minerr, maxerr])
 
     plt.xticks(all_lens)
     plt.yscale('log')
+    plt.grid(True)
     fig.autofmt_xdate()
     ax.set_ylabel('time (s)')
     ax.set_xlabel('data size')
@@ -82,4 +86,6 @@ def plot_datalen_vs_time(expected_sum, input_dir, output_file, title):
 if __name__ == "__main__":
     plot_sum_vs_time("out_chap06a-1", "chap06a-1.svg", "All permutations")
     plot_sum_vs_time("out_chap06c", "chap06c.svg", "With pruning")
-    plot_datalen_vs_time(150, "out_chap06c_sum150", "chap06c_sum150.svg", "chap06c")
+    plot_datalen_vs_time(150, "out_chap06c_sum150",
+                         "chap06c_sum150.svg",
+                         "With pruning (sum fixed at 150)")
